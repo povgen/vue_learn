@@ -1,30 +1,69 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="app">
+    <h1>Страница с постами</h1>
+
+    <my-button @click="showDialog" style="margin: 15px 0;">Создать пост</my-button>
+
+    <my-dialog v-model:show="dialogVisible">
+      <post-form @create="createPost"/>
+    </my-dialog>
+    <post-list
+      @remove="removePost"
+      :posts="posts"
+    />
+  </div>
 </template>
 
+
+<script>
+import {defineComponent} from 'vue'
+import PostForm from "@/components/PostForm.vue";
+import PostList from "@/components/PostList.vue";
+import MyButton from "@/components/UI/MyButton.vue";
+
+export default {
+  components: {MyButton, PostList, PostForm},
+  data() {
+    return {
+      posts: [],
+      dialogVisible: false
+    }
+  },
+  mounted() {
+    this.fetchPosts();
+  },
+  methods: {
+    createPost(post) {
+      this.posts.push(post)
+      this.dialogVisible = false;
+    },
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
+    },
+    showDialog() {
+      this.dialogVisible = true;
+    },
+    async fetchPosts() {
+      try {
+        const responsePromise = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
+        this.posts = await responsePromise.json();
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }
+}
+</script>
+
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+.app {
+  padding: 20px;
 }
 </style>
