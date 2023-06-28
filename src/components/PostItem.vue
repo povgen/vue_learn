@@ -1,12 +1,19 @@
 <template>
   <div class="post">
     <div>
+      <div><strong>Идентификатор:</strong> {{ post.id }}</div>
       <div><strong>Название:</strong> {{ post.title }}</div>
       <div><strong>Описание:</strong> {{ post.body }}</div>
     </div>
     <div class="post__buttons">
       <my-button
+        @click="$router.push('/posts/'+post.id)"
+      >
+          Открыть
+      </my-button>
+      <my-button
         @click="$emit('remove', post)"
+        style="margin-left: 10px;"
       >
         Удалить
       </my-button>
@@ -15,12 +22,16 @@
 </template>
 <script>
 
+import MyButton from "@/components/UI/MyButton.vue";
+
 export default {
+    components: {MyButton},
   props: {
     post: {
       type: Object,
       required: true
     }
+  }, methods: {
   }
 }
 </script>

@@ -4,6 +4,7 @@
     <my-input
       v-model="post.title"
       placeholder="Заголовок"
+      v-focus
     />
     <my-input
       v-model="post.body"

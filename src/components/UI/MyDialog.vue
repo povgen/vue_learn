@@ -8,20 +8,11 @@
 
 <script>
 import {defineComponent} from 'vue'
+import toggleMixin from "@/components/mixins/toggleMixin";
 
 export default defineComponent({
   name: "MyDialog",
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
-  methods: {
-    hideDialog() {
-      this.$emit('update:show', false)
-    }
-  }
+  mixins: [toggleMixin]
 })
 </script>
 
